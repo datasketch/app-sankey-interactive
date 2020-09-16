@@ -154,6 +154,16 @@ server <- function(input, output) {
       "Pastel2", "Set1", "Set2", "Set3", "Greys")
   })
   
+  categoriesFill <- reactive({
+    req(input$chooseColumns)
+    d <- data_load() %>% select(input$chooseColumns) %>% distinct() %>% as.data.frame()
+    nodes_unique <- c()
+    for(col in input$chooseColumns){
+      nodes_unique <- c(nodes_unique, unique(d[,col]))
+    }
+    nodes_unique
+  })
+  
   colourCustomChoices <- reactive({
     paletero::paletero_cat(categoriesFill(), palette = "Set1")
   }) 
@@ -166,10 +176,6 @@ server <- function(input, output) {
     colours <- input$colour_custom
     names(colours) <- sort(categoriesFill())
     colours
-  })
-  
-  categoriesFill <- reactive({
-    data_load() %>% select(input$fillval) %>% distinct() %>% pull()
   })
   
   plot_data <- reactive({
@@ -185,6 +191,8 @@ server <- function(input, output) {
     } else if(input$colour_method == "custom"){
       palette <- customColours()
     }
+    # browser()
+    if(is.null(palette)) return()
     hgch_sankey_CatCat(plot_data(), color_by = input$fillval, palette_colors = palette)
   })
   
