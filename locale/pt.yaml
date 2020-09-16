@@ -18,8 +18,13 @@ google: Google sheets
 google_sh_lb: Dados do Google sheets
 google_sh_pl: https://docs.google.com/spreadsheets/...
 google_sh_pg_lb: Sheet
+title: Título
+subtitle: Subtítulo
+caption: Creditos
 chooseColumns: Seleccionar pelo menos duas colunas como eixos de fluxo
-fillval: Opcionalmente, escolha a coluna como variável de preenchimento
+fillval: Definir a direcção do fluxo para colorir os fluxos
+left_to_right: Da esquerda para a direita
+right_to_left: Da direita para a esquerda
 colour_method: Seleccionar opção para a coloração dos fluxos
 palette: Escolher paleta de cores
 colourpalette: Paleta de cores

@@ -20,10 +20,7 @@ library(parmesan)
 library(paletero)
 library(hgchmagic)
 
-# load functions to prepare data and create plot
-source("sankey_functions.R")
-
-# Define UI for data download app ----
+# Define UI for app ----
 ui <- panelsPage(useShi18ny(),
                  langSelectorInput("lang", position = "fixed"),
                  panel(title = ui_("upload_data"),
@@ -178,6 +175,13 @@ server <- function(input, output) {
     colours
   })
   
+  fillFlow <- reactive({
+    flow <- c("from", "to")
+    names(flow) <- i_(c("left_to_right", "right_to_left"), lang())
+    flow
+  })
+
+  
   plot_data <- reactive({
     req(input$chooseColumns)
     data_load() %>% select(input$chooseColumns)
@@ -193,7 +197,8 @@ server <- function(input, output) {
     }
     # browser()
     if(is.null(palette)) return()
-    hgch_sankey_CatCat(plot_data(), color_by = input$fillval, palette_colors = palette)
+    hgch_sankey_CatCat(plot_data(), color_by = input$fillval, palette_colors = palette,
+                       title = input$title, subtitle = input$subtitle, caption = input$caption)
   })
   
   output$sankeyChart <- renderHighchart({
@@ -203,10 +208,10 @@ server <- function(input, output) {
   
   output$modal <- renderUI({
     dw <- i_("download", lang())
-    downloadImageUI("download_data_button", dw, formats = c("jpeg", "png"))
+    downloadImageUI("download_data_button", dw, formats = c("html","jpeg", "pdf", "png"))
   })
   
-  downloadImageServer("download_data_button", element = plot(), lib = "ggplot", formats = c("jpeg", "png"))
+  downloadImageServer("download_data_button", element = plot(), lib = "highcharter", formats = c("html","jpeg", "pdf", "png"))
   
 }
 

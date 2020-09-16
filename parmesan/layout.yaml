@@ -2,10 +2,16 @@ columns:
   label: columns
   inputs:
     - chooseColumns
-    - fillval
+titles:
+  label: titles
+  inputs:
+    - title
+    - subtitle
+    - caption
 colours:
   label: choose_flow_colours
   inputs:
+    - fillval
     - colour_method
     - palette
     - colour_custom

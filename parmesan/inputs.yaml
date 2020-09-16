@@ -1,3 +1,21 @@
+title:
+  show: true
+  input_type: textInput
+  input_params:
+    label: title
+    value:
+subtitle:
+  show: true
+  input_type: textInput
+  input_params:
+    label: subtitle
+    value:
+caption:
+  show: true
+  input_type: textInput
+  input_params:
+    label: caption
+    value: 
 chooseColumns:
   show: true
   input_type: selectInput
@@ -11,9 +29,7 @@ fillval:
   input_type: selectInput
   input_params:
     label: fillval
-    choices:
-      - from
-      - to
+    choices: fillFlow()
     selected: 1
   update_param: value
 colour_method:

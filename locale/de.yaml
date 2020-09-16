@@ -18,8 +18,13 @@ google: Google sheets
 google_sh_lb: Daten von einem Google sheet
 google_sh_pl: https://docs.google.com/spreadsheets/...
 google_sh_pg_lb: Sheet
+title: Titel
+subtitle: Untertitel
+caption: Credits
 chooseColumns: Wähle mindestens zwei Spalten aus
-fillval: Wähle eine Spalte als Füll-Variable (optional)
+fillval: Wähle eine Richtung für die Flow-Farben
+left_to_right: Von links nach rechts
+right_to_left: Von rechts nach links
 colour_method: Wähle eine Farb-Option aus
 palette: Wähle eine Farbpalette aus
 colourpalette: Farbpalette

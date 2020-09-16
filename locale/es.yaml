@@ -18,8 +18,13 @@ google: Google sheets
 google_sh_lb: Datos de Google sheets
 google_sh_pl: https://docs.google.com/spreadsheets/...
 google_sh_pg_lb: Sheet
+title: Título
+subtitle: Subtítulo
+caption: Creditos
 chooseColumns: Selecciona al menos dos columnas como ejes de flujo
-fillval: Opcionalmente, elige una columna como variable de color
+fillval: Selecciona la dirección del flujo para colorear los flujos
+left_to_right: De izquierda a derecha
+right_to_left: De derecha a izquierda
 colour_method: Selecciona una opción para colorear los flujos
 palette: Elije la paleta de colores
 colourpalette: Paleta de colores

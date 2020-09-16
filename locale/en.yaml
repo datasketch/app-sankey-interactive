@@ -18,8 +18,13 @@ google: Google sheets
 google_sh_lb: Data from Google sheet
 google_sh_pl: https://docs.google.com/spreadsheets/...
 google_sh_pg_lb: Sheet
+title: Title
+subtitle: Subtitle
+caption: Credits
 chooseColumns: Select at least two columns as flow axes
-fillval: Optionally set column as fill variable
+fillval: Set flow direction for colouring of flows
+left_to_right: Left to right
+right_to_left: Right to left
 colour_method: Select option for colouring of flows
 palette: Choose colour palette
 colourpalette: Colour palette
