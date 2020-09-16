@@ -11,14 +11,13 @@ fillval:
   input_type: selectInput
   input_params:
     label: fillval
-    choices: datasetColumnChoices()
+    choices:
+      - from
+      - to
     selected: 1
   update_param: value
 colour_method:
   show: true
-  show_if:
-    useFillValue():
-      equals: true
   input_type: selectInput
   input_params:
     label: colour_method
@@ -44,10 +43,3 @@ colour_custom:
     label: colour_custom
     colors: colourCustomChoices()
     max_colors: maxCustomChoices()
-stratumColour:
-  show: true
-  input_type: radioButtons
-  input_params:
-    label: stratumColour
-    choices: stratumColourChoices()
-    selected: black

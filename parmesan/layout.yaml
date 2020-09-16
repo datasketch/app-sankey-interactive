@@ -9,7 +9,3 @@ colours:
     - colour_method
     - palette
     - colour_custom
-styling:
-  label: styling
-  inputs:
-    - stratumColour

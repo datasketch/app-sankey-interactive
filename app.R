@@ -137,10 +137,6 @@ server <- function(input, output) {
     dic_load()$label[1:2]
   })
   
-  useFillValue <- reactive({
-    if(!is.null(input$fillval)) TRUE else FALSE
-  })
-  
   colourMethodChoices <- reactive({
     colour_method_choices <- list("colourpalette" = "colourpalette", "custom" = "custom")
     names(colour_method_choices) <- i_(names(colour_method_choices), lang())
@@ -154,15 +150,8 @@ server <- function(input, output) {
   })
   
   colourPaletteChoices <- reactive({
-    list(
-      "Categorical:" = list("Accent", "Dark2", "Paired", "Pastel1",
-                            "Pastel2", "Set1", "Set2", "Set3"),
-      "Diverging" = list("BrBG", "PiYG", "PRGn", "PuOr", "RdBu", "RdGy",
-                         "RdYlBu", "RdYlGn", "Spectral"),
-      "Sequential:" = list("Blues", "BuGn", "BuPu", "GnBu", "Greens",
-                           "Greys", "Oranges", "OrRd", "PuBu", "PuBuGn", "PuRd", "Purples",
-                           "RdPu", "Reds", "YlGn", "YlGnBu", "GlOrBr", "YlOrRD")
-    )
+    c("Accent", "Dark2", "Paired", "Pastel1",
+      "Pastel2", "Set1", "Set2", "Set3", "Greys")
   })
   
   colourCustomChoices <- reactive({
@@ -184,11 +173,8 @@ server <- function(input, output) {
   })
   
   plot_data <- reactive({
-    data <- prepare_data(df = data_load(),
-                         col_vars = input$chooseColumns,
-                         fill_var = input$fillval)
-    data <- data %>% mutate(fill = as.character(fill))
-    data
+    req(input$chooseColumns)
+    data_load() %>% select(input$chooseColumns)
   })
   
   plot <- reactive({
@@ -196,20 +182,10 @@ server <- function(input, output) {
     palette = input$palette
     if(input$colour_method == "colourpalette"){
       palette <- input$palette
-      manualcols <- NULL
     } else if(input$colour_method == "custom"){
-      palette <- NULL
-      manualcols <- customColours()
+      palette <- customColours()
     }
-    data <- data_load() %>% select(input$chooseColumns)
-    # browser()
-    hgch_sankey_CatCat(data)
-    # create_sankey_plot(df = plot_data(),
-    #                    stratum_colour = input$stratumColour,
-    #                    fill_var = input$fillval,
-    #                    palette = palette,
-    #                    manualcols = manualcols
-    # )
+    hgch_sankey_CatCat(plot_data(), color_by = input$fillval, palette_colors = palette)
   })
   
   output$sankeyChart <- renderHighchart({
