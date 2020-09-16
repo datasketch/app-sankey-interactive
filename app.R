@@ -52,7 +52,7 @@ server <- function(input, output) {
   i18n <- list(defaultLang = "en",
                availableLangs = c("en", "de", "es", "pt"))
   
-  lang <- callModule(langSelector, "lang", i18n = i18n, showSelector = FALSE)
+  lang <- callModule(langSelector, "lang", i18n = i18n, showSelector = TRUE)
   
   observeEvent(lang(),{
     uiLangUpdate(input$shi18ny_ui_classes, lang())
