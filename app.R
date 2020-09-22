@@ -19,6 +19,7 @@ library(hotr)
 library(parmesan)
 library(paletero)
 library(hgchmagic)
+library(dsthemer)
 
 # Define UI for app ----
 ui <- panelsPage(useShi18ny(),
@@ -28,7 +29,12 @@ ui <- panelsPage(useShi18ny(),
                        body = uiOutput("dataInput")),
                  panel(title = ui_("dataset"),
                        width = 300,
-                       body = uiOutput("dataset")),
+                       body = div(
+                         div(
+                           uiOutput("select_var"),
+                           uiOutput("dataset")
+                         )
+                       )),
                  panel(title = ui_("options"),
                        width = 250,
                        color = "chardonnay",
@@ -62,14 +68,14 @@ server <- function(input, output) {
     choices <- c("sampleData", "pasted", "fileUpload", "googleSheets")
     names(choices) <- i_(c("sample", "paste", "upload", "google"), lang = lang())
     tableInputUI("initial_data",
-                 "Input data",
+                 i_("input_data", lang()),
                  choices = choices,
                  selected =  "sampleData")
   })
   
   sample_data <- reactive({
-    sm_f <- list("data/titanic_data.csv",
-                 "data/election_data.csv")
+    sm_f <- list(File_1 = "data/titanic_data.csv",
+                 File_2 = "data/election_data.csv")
     names(sm_f) <- i_(c("sample_titanic_name", "sample_elections_name"), lang())
     sm_f
   })
@@ -77,7 +83,7 @@ server <- function(input, output) {
   inputData <- tableInputServer("initial_data", 
                                 sampleLabel = i_("sample_lb", lang()),
                                 sampleFiles = sample_data(),
-                                sampleSelected = names(sample_data())[1],
+                                sampleSelected = names(reactive(sample_data()))[1],
                                 
                                 pasteLabel = i_("paste", lang()),
                                 pasteValue = "",
@@ -97,6 +103,13 @@ server <- function(input, output) {
     if (is.null(inputData()))
       return()
     suppressWarnings(hotr("hotr_input", data = inputData(), options = list(height = 470)))
+  })
+  
+  output$select_var <- renderUI({
+    selectInput(inputId = "chooseColumns", label= i_("chooseColumns", lang()),
+                choices = datasetColumnChoices(),
+                selected = datasetColumnSelected(),
+                multiple = TRUE)
   })
   
   data_fringe <- reactive({
@@ -140,10 +153,8 @@ server <- function(input, output) {
     colour_method_choices
   })
   
-  stratumColourChoices <- reactive({
-    stratum_method_choices <- list("black" = "black", "white" = "white")
-    names(stratum_method_choices) <- i_(names(stratum_method_choices), lang())
-    stratum_method_choices
+  background <- reactive({
+    dsthemer_get("datasketch")$background_color
   })
   
   colourPaletteChoices <- reactive({
@@ -198,7 +209,8 @@ server <- function(input, output) {
     # browser()
     if(is.null(palette)) return()
     hgch_sankey_CatCat(plot_data(), color_by = input$fillval, palette_colors = palette,
-                       title = input$title, subtitle = input$subtitle, caption = input$caption)
+                       title = input$title, subtitle = input$subtitle, caption = input$caption,
+                       background_color = input$background_color)
   })
   
   output$sankeyChart <- renderHighchart({

@@ -16,14 +16,12 @@ caption:
   input_params:
     label: caption
     value: 
-chooseColumns:
+background_color:
   show: true
-  input_type: selectInput
+  input_type: colorPaletteInput
   input_params:
-    label: chooseColumns
-    choices: datasetColumnChoices()
-    selected: datasetColumnSelected()
-    multiple: true
+    label: background_color
+    colors: background()
 fillval:
   show: true
   input_type: selectInput

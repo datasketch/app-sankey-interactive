@@ -1,7 +1,3 @@
-columns:
-  label: columns
-  inputs:
-    - chooseColumns
 titles:
   label: titles
   inputs:
@@ -9,8 +5,9 @@ titles:
     - subtitle
     - caption
 colours:
-  label: choose_flow_colours
+  label: choose_colors
   inputs:
+    - background_color
     - fillval
     - colour_method
     - palette

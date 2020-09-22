@@ -2,6 +2,7 @@ upload_data: Carregar dados
 dataset: Conjunto de dados
 options: Opções
 viz: Diagrama Sankey
+input_data: Carga de dados
 sample: Amostra de dados
 sample_lb: Seleccionar uma amostra de dados
 sample_titanic_name: Titanic
@@ -18,6 +19,7 @@ google: Google sheets
 google_sh_lb: Dados do Google sheets
 google_sh_pl: https://docs.google.com/spreadsheets/...
 google_sh_pg_lb: Sheet
+titles: Títulos
 title: Título
 subtitle: Subtítulo
 caption: Creditos
@@ -39,5 +41,6 @@ de: Alemão
 es: Espanhol
 pt: Português
 columns: Colunas
-choose_flow_colours: Escolher cores de fluxo
+choose_colors: Escolha cores de fluxo
+background_color: Escolha cor de fundo
 styling: Estilo

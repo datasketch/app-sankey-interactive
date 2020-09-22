@@ -2,6 +2,7 @@ upload_data: Upload data
 dataset: Dataset
 options: Options
 viz: Sankey plot
+input_data: Input data
 sample: Sample data
 sample_lb: Select a sample data
 sample_titanic_name: Titanic
@@ -18,26 +19,28 @@ google: Google sheets
 google_sh_lb: Data from Google sheet
 google_sh_pl: https://docs.google.com/spreadsheets/...
 google_sh_pg_lb: Sheet
+titles: Titles
 title: Title
 subtitle: Subtitle
 caption: Credits
 chooseColumns: Select at least two columns as flow axes
-fillval: Set flow direction for colouring of flows
+fillval: Set flow direction for coloring of flows
 left_to_right: Left to right
 right_to_left: Right to left
-colour_method: Select option for colouring of flows
-palette: Choose colour palette
-colourpalette: Colour palette
+colour_method: Select option for coloring of flows
+palette: Choose color palette
+colourpalette: Color palette
 custom: Custom
 black: Black
 white: White
 colour_custom: Select custom colours
-stratumColour: Choose colour of stratum
+stratumColour: Choose color of stratum
 download_plot: Download plot
 en: English
 de: German
 es: Spanish
 pt: Portuguese
 columns: Columns
-choose_flow_colours: Choose flow colours
+choose_colors: Choose colors
+background_color: Choose background color
 styling: Styling
