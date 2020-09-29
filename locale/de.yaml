@@ -23,6 +23,10 @@ titles: Titel
 title: Titel
 subtitle: Untertitel
 caption: Credits
+dataLabel_type: Wähle Option für Labels
+node_name: Name
+total: Total
+percentage: Prozent
 chooseColumns: Wähle mindestens zwei Spalten aus
 fillval: Wähle eine Richtung für die Flow-Farben
 left_to_right: Von links nach rechts

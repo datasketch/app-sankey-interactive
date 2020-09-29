@@ -23,6 +23,10 @@ titles: Titles
 title: Title
 subtitle: Subtitle
 caption: Credits
+dataLabel_type: Choose type of datalabels
+node_name: Name of nodes
+total: Total
+percentage: Percentage
 chooseColumns: Select at least two columns as flow axes
 fillval: Set flow direction for coloring of flows
 left_to_right: Left to right

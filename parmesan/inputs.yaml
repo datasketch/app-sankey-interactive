@@ -16,6 +16,12 @@ caption:
   input_params:
     label: caption
     value: 
+dataLabel_type:
+  show: true
+  input_type: radioButtons
+  input_params:
+    label: dataLabel_type
+    choices: dataLabelChoices()
 background_color:
   show: true
   input_type: colorPaletteInput

@@ -4,6 +4,7 @@ titles:
     - title
     - subtitle
     - caption
+    - dataLabel_type
 colours:
   label: choose_colors
   inputs:

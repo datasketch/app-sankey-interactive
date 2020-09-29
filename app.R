@@ -162,6 +162,12 @@ server <- function(input, output) {
       "Pastel2", "Set1", "Set2", "Set3", "Greys")
   })
   
+  dataLabelChoices <- reactive({
+    label <- c("node_name", "total", "percentage")
+    names(label) <- i_(c("node_name", "total", "percentage"), lang())
+    label
+  })
+  
   categoriesFill <- reactive({
     req(input$chooseColumns)
     d <- data_load() %>% select(input$chooseColumns) %>% distinct() %>% as.data.frame()
@@ -169,7 +175,7 @@ server <- function(input, output) {
     for(col in input$chooseColumns){
       nodes_unique <- c(nodes_unique, unique(d[,col]))
     }
-    nodes_unique
+    unique(nodes_unique)
   })
   
   colourCustomChoices <- reactive({
@@ -206,11 +212,10 @@ server <- function(input, output) {
     } else if(input$colour_method == "custom"){
       palette <- customColours()
     }
-    # browser()
     if(is.null(palette)) return()
     hgch_sankey_CatCat(plot_data(), color_by = input$fillval, palette_colors = palette,
                        title = input$title, subtitle = input$subtitle, caption = input$caption,
-                       background_color = input$background_color)
+                       background_color = input$background_color, dataLabels_type = input$dataLabel_type)
   })
   
   output$sankeyChart <- renderHighchart({

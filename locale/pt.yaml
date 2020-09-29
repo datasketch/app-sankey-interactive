@@ -23,6 +23,10 @@ titles: Títulos
 title: Título
 subtitle: Subtítulo
 caption: Creditos
+dataLabel_type: Escolha opção para rótulos
+node_name: Nome
+total: Total
+percentage: Percentagem
 chooseColumns: Seleccionar pelo menos duas colunas como eixos de fluxo
 fillval: Definir a direcção do fluxo para colorir os fluxos
 left_to_right: Da esquerda para a direita
