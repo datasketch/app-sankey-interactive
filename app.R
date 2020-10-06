@@ -12,6 +12,7 @@ library(V8)
 
 # load in ds packages
 library(dsmodules)
+library(dspins)
 library(shinyinvoer)
 library(shinypanels)
 library(shi18ny)
@@ -40,25 +41,22 @@ ui <- panelsPage(useShi18ny(),
                        color = "chardonnay",
                        body = uiOutput("controls")),
                  panel(title = ui_("viz"),
+                       title_plugin = uiOutput("download"),
                        color = "chardonnay",
                        can_collapse = FALSE,
                        body = div(
                          langSelectorInput("lang", position = "fixed"),
-                         highchartOutput("sankeyChart"),
-                         shinypanels::modal(id = "download",
-                                            title = ui_("download_plot"),
-                                            uiOutput("modal"))),
-                       footer = shinypanels::modalButton(label = ui_("download_plot"), modal_id = "download")))
+                         highchartOutput("sankeyChart"))))
 
 
 
 # Define server logic ----
-server <- function(input, output) {
+server <- function(input, output, session) {
   
   i18n <- list(defaultLang = "en",
                availableLangs = c("en", "de", "es", "pt"))
   
-  lang <- callModule(langSelector, "lang", i18n = i18n, showSelector = TRUE)
+  lang <- callModule(langSelector, "lang", i18n = i18n, showSelector = FALSE)
   
   observeEvent(lang(),{
     uiLangUpdate(input$shi18ny_ui_classes, lang())
@@ -201,11 +199,13 @@ server <- function(input, output) {
   
   plot_data <- reactive({
     req(input$chooseColumns)
+    if(!input$chooseColumns %in% names(data_load())) return()
     data_load() %>% select(input$chooseColumns)
   })
   
-  plot <- reactive({
+  hgch_viz <- reactive({
     req(input$chooseColumns)
+    req(plot_data())
     palette = input$palette
     if(input$colour_method == "colourpalette"){
       palette <- input$palette
@@ -219,16 +219,61 @@ server <- function(input, output) {
   })
   
   output$sankeyChart <- renderHighchart({
-    plot()
+    hgch_viz()
   })
   
   
-  output$modal <- renderUI({
+  output$download <- renderUI({
+    lb <- i_("download_viz", lang())
     dw <- i_("download", lang())
-    downloadImageUI("download_data_button", dw, formats = c("html","jpeg", "pdf", "png"))
+    gl <- i_("get_link", lang())
+    mb <- list(textInput("name", i_("gl_name", lang())),
+               textInput("description", i_("gl_description", lang())),
+               selectInput("license", i_("gl_license", lang()), choices = c("CC0", "CC-BY")),
+               selectizeInput("tags", i_("gl_tags", lang()), choices = list("No tag" = "no-tag"), multiple = TRUE, options = list(plugins= list('remove_button', 'drag_drop'))),
+               selectizeInput("category", i_("gl_category", lang()), choices = list("No category" = "no-category")))
+    downloadDsUI("download_data_button", dropdownLabel = lb, text = dw, formats = c("html","jpeg", "pdf", "png"),
+                 display = "dropdown", dropdownWidth = 170, getLinkLabel = gl, modalTitle = gl, modalBody = mb,
+                 modalButtonLabel = i_("gl_save", lang()), modalLinkLabel = i_("gl_url", lang()), modalIframeLabel = i_("gl_iframe", lang()),
+                 modalFormatChoices = c("HTML" = "html", "PNG" = "png"))
   })
   
-  downloadImageServer("download_data_button", element = plot(), lib = "highcharter", formats = c("html","jpeg", "pdf", "png"))
+  
+  par <- list(user_name = "brandon")
+  url_par <- reactive({
+    url_params(par, session)
+  })
+  
+  pin_ <- function(x, bkt, ...) {
+    x <- dsmodules:::eval_reactives(x)
+    bkt <- dsmodules:::eval_reactives(bkt)
+    nm <- input$`download_data_button-modal_form-name`
+    if (!nzchar(input$`download_data_button-modal_form-name`)) {
+      nm <- paste0("saved", "_", gsub("[ _:]", "-", substr(as.POSIXct(Sys.time()), 1, 19)))
+      updateTextInput(session, "download_data_button-modal_form-name", value = nm)
+    }
+    dv <- dsviz(x,
+                name = nm,
+                description = input$`download_data_button-modal_form-description`,
+                license = input$`download_data_button-modal_form-license`,
+                tags = input$`download_data_button-modal_form-tags`,
+                category = input$`download_data_button-modal_form-category`)
+    dspins_user_board_connect(bkt)
+    Sys.setlocale(locale = "en_US.UTF-8")
+    pin(dv, bucket_id = bkt)
+  }
+  
+  
+  observe({
+    req(hgch_viz())
+    if (is.null(url_par()$inputs$user_name)) return()
+    
+    downloadDsServer("download_data_button", element = reactive(hgch_viz()),
+                     formats = c("html", "jpeg", "pdf", "png"),
+                     errorMessage = i_("error_down", lang()),
+                     modalFunction = pin_, reactive(hgch_viz()),
+                     bkt = url_par()$inputs$user_name)
+  })
   
 }
 
