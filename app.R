@@ -19,6 +19,9 @@ library(parmesan)
 library(paletero)
 library(hgchmagic)
 library(dsthemer)
+library(shinydisconnect)
+
+Sys.setlocale("LC_ALL","C")
 
 # Define UI for app ----
 ui <- panelsPage(useShi18ny(),
