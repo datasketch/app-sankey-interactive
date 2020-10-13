@@ -2,9 +2,7 @@
 library(shiny)
 library(shinyWidgets)
 library(dplyr)
-library(titanic)
 library(ggplot2)
-library(ggforce)
 library(RColorBrewer)
 library(scales)
 library(tidyverse)
@@ -44,9 +42,7 @@ ui <- panelsPage(useShi18ny(),
                        title_plugin = uiOutput("download"),
                        color = "chardonnay",
                        can_collapse = FALSE,
-                       body = div(
-                         langSelectorInput("lang", position = "fixed"),
-                         highchartOutput("sankeyChart"))))
+                       body =  uiOutput("viz")))
 
 
 
@@ -141,8 +137,26 @@ server <- function(input, output, session) {
     dic_load()$label
   })
   
+  moreDataInfo <- reactive({
+    data_load() %>% map_df( ~ (data.frame(
+      n_distinct = n_distinct(.x),
+      class = class(.x)
+    )),
+    .id = "variable") %>% filter(!class == "vctrs_vctr")
+  })
+  
   datasetColumnSelected <- reactive({
-    dic_load()$label[1:2]
+    possible_columns <- moreDataInfo() %>% filter(n_distinct < 10) %>% distinct(variable) %>% pull()
+    dic_cat <- dic_load() %>% filter(hdType == "Cat") %>% filter(label %in% possible_columns)
+    dic_cat$label[1:2]
+  })
+  
+  dic_draw <- reactive({
+    moreDataInfo() %>% filter(variable %in% input$chooseColumns)
+  })
+  
+  fillValueSelected <- reactive({
+    datasetColumnSelected()[1]
   })
   
   colourMethodChoices <- reactive({
@@ -200,6 +214,9 @@ server <- function(input, output, session) {
   plot_data <- reactive({
     req(input$chooseColumns)
     if(!input$chooseColumns %in% names(data_load())) return()
+    if(any(dic_draw()$class != "hd_Cat") | any(dic_draw()$n_distinct > 10)) return()
+    if(length(input$chooseColumns) < 2) return()
+    # browser()
     data_load() %>% select(input$chooseColumns)
   })
   
@@ -213,13 +230,26 @@ server <- function(input, output, session) {
       palette <- customColours()
     }
     if(is.null(palette)) return()
+    # browser()
     hgch_sankey_CatCat(plot_data(), color_by = input$fillval, palette_colors = palette,
                        title = input$title, subtitle = input$subtitle, caption = input$caption,
                        background_color = input$background_color, dataLabels_type = input$dataLabel_type)
   })
   
   output$sankeyChart <- renderHighchart({
+    if(is.null(hgch_viz())) return()
     hgch_viz()
+  })
+  
+  output$viz <- renderUI({
+    if(is.null(dic_draw()))return()
+    if((any(dic_draw()$class != "hd_Cat") | any(dic_draw()$n_distinct > 10)) | length(input$chooseColumns) < 2){
+      v <- div(shinypanels::infomessage(type = "warning" , i_("cannot_plot", lang())),
+               shinypanels::infomessage(type = "info" , i_("data_advice", lang())))
+    } else {
+      v <- highchartOutput("sankeyChart")
+    }
+    v
   })
   
   

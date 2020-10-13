@@ -34,7 +34,7 @@ fillval:
   input_params:
     label: fillval
     choices: fillFlow()
-    selected: 1
+    selected: fillValueSelected()
   update_param: value
 colour_method:
   show: true
