@@ -7,6 +7,7 @@ library(RColorBrewer)
 library(scales)
 library(tidyverse)
 library(V8)
+library(shinydisconnect)
 
 # load in ds packages
 library(dsmodules)
@@ -19,7 +20,6 @@ library(parmesan)
 library(paletero)
 library(hgchmagic)
 library(dsthemer)
-library(shinydisconnect)
 
 Sys.setlocale("LC_ALL","C")
 
@@ -193,13 +193,17 @@ server <- function(input, output, session) {
   })
   
   categoriesFill <- reactive({
-    req(input$chooseColumns)
-    d <- data_load() %>% select(input$chooseColumns) %>% distinct() %>% as.data.frame()
+    req(plot_data_orig())
+    d <- plot_data_orig() %>% distinct() %>% as.data.frame()
     nodes_unique <- c()
-    for(col in input$chooseColumns){
+    for(col in names(d)){
       nodes_unique <- c(nodes_unique, unique(d[,col]))
     }
     unique(nodes_unique)
+  })
+  
+  categoriesMissingsEncode <- reactive({
+    categoriesFill()[!is.na(categoriesFill())]
   })
   
   colourCustomChoices <- reactive({
@@ -211,6 +215,7 @@ server <- function(input, output, session) {
   })
   
   customColours <- reactive({
+    req(input$colour_custom)
     colours <- input$colour_custom
     names(colours) <- sort(categoriesFill())
     colours
@@ -223,13 +228,52 @@ server <- function(input, output, session) {
   })
 
   
-  plot_data <- reactive({
+  plot_data_orig <- reactive({
     req(input$chooseColumns)
-    if(!input$chooseColumns %in% names(data_load())) return()
+    if(!any(input$chooseColumns %in% names(data_load()))) return()
     if(any(dic_draw()$class != "hd_Cat") | any(dic_draw()$n_distinct > 10)) return()
     if(length(input$chooseColumns) < 2) return()
-    # browser()
     data_load() %>% select(input$chooseColumns)
+  })
+  
+  hasdataNA <- reactive({
+    req(plot_data_orig())
+    req(input$code_as_na)
+    cols_contain_na <- purrr::map_lgl(.x = plot_data_orig(),
+                                      .f = function(.x) any(is.na(.x)))
+    if(length(input$code_as_na > 0)){
+      cols_contain_na <- c(cols_contain_na, TRUE)
+    }
+    any(cols_contain_na)
+  })
+  
+  input_drop_na <- reactive({
+    if(is.null(input$drop_na)){
+      drop_na <- FALSE
+    } else {
+      drop_na <- input$drop_na
+    }
+    drop_na
+  })
+  
+  plot_data <- reactive({
+    req(plot_data_orig())
+    d <- plot_data_orig()
+    if(!is.null(input$code_as_na)){
+      d <- d %>% purrr::map_df(function(.x) {
+                            .x[.x %in% input$code_as_na] <- NA
+                            .x
+                            })
+    }
+    if(!is.null(input$drop_na)){
+      if(input$drop_na){
+        d <- d %>% filter(complete.cases(.))
+      }
+    }
+    if(!is.null(input$na_label)){
+      d[is.na(d)] <- input$na_label
+      }
+    d
   })
   
   hgch_viz <- reactive({
@@ -239,10 +283,10 @@ server <- function(input, output, session) {
     if(input$colour_method == "colourpalette"){
       palette <- input$palette
     } else if(input$colour_method == "custom"){
+      req(customColours())
       palette <- customColours()
     }
     if(is.null(palette)) return()
-    # browser()
     hgch_sankey_CatCat(plot_data(), color_by = input$fillval, palette_colors = palette,
                        title = input$title, subtitle = input$subtitle, caption = input$caption,
                        background_color = input$background_color, dataLabels_type = input$dataLabel_type)

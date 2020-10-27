@@ -5,6 +5,12 @@ titles:
     - subtitle
     - caption
     - dataLabel_type
+missings:
+  label: missings
+  inputs:
+    - code_as_na
+    - drop_na
+    - na_label
 colours:
   label: choose_colors
   inputs:

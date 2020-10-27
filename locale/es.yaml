@@ -28,6 +28,10 @@ node_name: Nombre
 total: Total
 percentage: Porcentaje
 chooseColumns: Selecciona al menos dos columnas como ejes de flujo
+missings: Valores faltantes
+code_as_na: Codificar categorías como valores faltantes
+drop_na: Mostrar valores faltantes
+na_label: Etiqueta de valores faltantes
 fillval: Selecciona la dirección del flujo para colorear los flujos
 left_to_right: De izquierda a derecha
 right_to_left: De derecha a izquierda

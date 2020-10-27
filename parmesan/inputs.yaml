@@ -36,6 +36,33 @@ fillval:
     choices: fillFlow()
     selected: fillValueSelected()
   update_param: value
+code_as_na:
+  show: true
+  input_type: selectInput
+  input_params:
+    label: code_as_na
+    choices: categoriesMissingsEncode()
+    multiple: true
+drop_na:
+  show: true
+  show_if:
+    hasdataNA():
+      equals: true
+  input_type: checkboxInput
+  input_params:
+    label: drop_na
+    value: false
+na_label: 
+  show: true
+  show_if_all:
+   hasdataNA():
+      equals: true
+   input_drop_na():
+      equals: false
+  input_type: textInput
+  input_params:
+    label: na_label
+    value: "(NA)"
 colour_method:
   show: true
   input_type: selectInput

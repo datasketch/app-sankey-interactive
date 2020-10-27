@@ -28,6 +28,10 @@ node_name: Name
 total: Total
 percentage: Prozent
 chooseColumns: Wähle mindestens zwei Spalten aus
+missings: Fehlende Werte
+code_as_na: Kategorien als fehlende Werte kodieren
+drop_na: Fehlende Werte nicht anzeigen
+na_label: Fehlende Werte beschriften
 fillval: Wähle eine Richtung für die Flow-Farben
 left_to_right: Von links nach rechts
 right_to_left: Von rechts nach links

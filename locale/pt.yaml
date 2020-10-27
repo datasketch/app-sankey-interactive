@@ -28,6 +28,10 @@ node_name: Nome
 total: Total
 percentage: Percentagem
 chooseColumns: Seleccionar pelo menos duas colunas como eixos de fluxo
+missings: Valores em falta
+code_as_na: Codificar categorias como valores em falta
+drop_na: Mostrar valores em falta
+na_label: Etiqueta de valor em falta
 fillval: Definir a direcção do fluxo para colorir os fluxos
 left_to_right: Da esquerda para a direita
 right_to_left: Da direita para a esquerda

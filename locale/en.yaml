@@ -28,6 +28,10 @@ node_name: Name of nodes
 total: Total
 percentage: Percentage
 chooseColumns: Select at least two columns as flow axes
+missings: Missing values
+code_as_na: Code category as NA
+drop_na: Drop NA
+na_label: Label NA
 fillval: Set flow direction for coloring of flows
 left_to_right: Left to right
 right_to_left: Right to left
