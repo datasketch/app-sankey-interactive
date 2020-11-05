@@ -231,9 +231,15 @@ server <- function(input, output, session) {
   plot_data_orig <- reactive({
     req(input$chooseColumns)
     if(!any(input$chooseColumns %in% names(data_load()))) return()
-    if(any(dic_draw()$class != "hd_Cat") | any(dic_draw()$n_distinct > 10)) return()
+    if(!all(dic_draw()$class %in% c("hd_Cat", "hd_Dat")) | any(dic_draw()$n_distinct > 20)) return()
     if(length(input$chooseColumns) < 2) return()
-    data_load() %>% select(input$chooseColumns)
+    plot_data <- data_load() %>% select(input$chooseColumns)
+    if(any(dic_draw()$class == "hd_Dat")){
+      dat_cols <- dic_draw()[dic_draw()$class == "hd_Dat",]$variable
+      plot_data <- plot_data %>% 
+        mutate_at(vars(all_of(dat_cols)), ~homodatum::as_Cat(as.character(.)))
+    }
+    plot_data
   })
   
   hasdataNA <- reactive({
@@ -287,9 +293,21 @@ server <- function(input, output, session) {
       palette <- customColours()
     }
     if(is.null(palette)) return()
-    hgch_sankey_CatCat(plot_data(), color_by = input$fillval, palette_colors = palette,
-                       title = input$title, subtitle = input$subtitle, caption = input$caption,
-                       background_color = input$background_color, dataLabels_type = input$dataLabel_type)
+    
+    opts <- dsvizopts::merge_dsviz_options(color_by = input$fillval, palette_colors = palette,
+                                           title = input$title, subtitle = input$subtitle, caption = input$caption,
+                                           background_color = input$background_color, dataLabels_type = input$dataLabel_type)
+    
+    if(!is.null(input$caption)){
+      if(nchar(input$caption) > 0){
+        opts <- c(opts, plot_margin_bottom = 55)
+      }
+    }
+    
+    viz <- do.call("hgch_sankey_CatCat", c(list(data = plot_data(), opts = opts
+    )))
+    
+    viz
   })
   
   output$sankeyChart <- renderHighchart({
@@ -299,7 +317,7 @@ server <- function(input, output, session) {
   
   output$viz <- renderUI({
     if(is.null(dic_draw()))return()
-    if((any(dic_draw()$class != "hd_Cat") | any(dic_draw()$n_distinct > 10)) | length(input$chooseColumns) < 2){
+    if((!all(dic_draw()$class %in% c("hd_Cat", "hd_Dat")) | any(dic_draw()$n_distinct > 20)) | length(input$chooseColumns) < 2){
       v <- div(shinypanels::infomessage(type = "warning" , i_("cannot_plot", lang())),
                shinypanels::infomessage(type = "info" , i_("data_advice", lang())))
     } else {
