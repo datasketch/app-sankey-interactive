@@ -23,7 +23,7 @@ titles: Títulos
 title: Título
 subtitle: Subtítulo
 caption: Creditos
-dataLabel_type: Elije opción para etiquetas
+dataLabel_type: Elige opción para etiquetas
 node_name: Nombre
 total: Total
 percentage: Porcentaje
@@ -36,21 +36,21 @@ fillval: Selecciona la dirección del flujo para colorear los flujos
 left_to_right: De izquierda a derecha
 right_to_left: De derecha a izquierda
 colour_method: Selecciona una opción para colorear los flujos
-palette: Elije la paleta de colores
+palette: Elige la paleta de colores
 colourpalette: Paleta de colores
 custom: Personalizado
 black: Negro
 white: Blanco
 colour_custom: Selecciona los colores personalizados
-stratumColour: Elije el color del estrato
+stratumColour: Elige el color del estrato
 download_plot: Descargar gráfico
 en: Inglés
 de: Alemán
 es: Español
 pt: Portugués
 columns: Columnas
-choose_colors: Elije los colores del flujo
-background_color: Elije el color de fondo
+choose_colors: Elige los colores del flujo
+background_color: Elige el color de fondo
 styling: Estilo
 error_down: ¡Oh, algo a sucedido!, por favor intenta más tarde.
 download_viz: Descarga
@@ -58,8 +58,11 @@ get_link: Obtener enlace
 gl_name: Nombre
 gl_slug: Slug
 gl_description: Descripción
+gl_source: Fuente
+gl_source_name: Título
 gl_license: Licencia
 gl_tags: Etiquetas
+gl_type_tags: Presiona enter para agregar cada etiqueta
 gl_category: Categorías
 gl_save: Guardar en dslibrary
 gl_url: URL

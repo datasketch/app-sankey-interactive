@@ -58,8 +58,11 @@ get_link: Get link
 gl_name: Name
 gl_slug: Slug
 gl_description: Description
+gl_source: Source
+gl_source_name: Name
 gl_license: License
 gl_tags: Tags
+gl_type_tags: Type tag(s) and press enter after each one
 gl_category: Category
 gl_save: Save in dslibrary
 gl_url: URL

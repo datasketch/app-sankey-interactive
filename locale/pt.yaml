@@ -58,8 +58,11 @@ get_link: Obter ligação
 gl_name: Nome
 gl_slug: Slug
 gl_description: Descrição
+gl_source: Fonte
+gl_source_name: Título
 gl_license: Licença
 gl_tags: Etiquetas
+gl_type_tags: Pressione enter para adicionar cada etiqueta
 gl_category: Categorias
 gl_save: Guardar na dslibrary
 gl_url: URL

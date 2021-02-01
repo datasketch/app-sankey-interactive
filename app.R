@@ -21,6 +21,8 @@ library(paletero)
 library(hgchmagic)
 library(dsthemer)
 
+webshot::install_phantomjs()
+
 Sys.setlocale("LC_ALL","C")
 
 # Define UI for app ----
@@ -158,8 +160,8 @@ server <- function(input, output, session) {
   })
   
   datasetColumnSelected <- reactive({
-    possible_columns <- moreDataInfo() %>% filter(n_distinct < 10) %>% distinct(variable) %>% pull()
-    dic_cat <- dic_load() %>% filter(hdType == "Cat") %>% filter(label %in% possible_columns)
+    possible_columns <- moreDataInfo() %>% filter(n_distinct <= 20) %>% distinct(variable) %>% pull()
+    dic_cat <- dic_load() %>% filter(hdType %in% c("Cat", "Dat")) %>% filter(label %in% possible_columns)
     dic_cat$label[1:2]
   })
   
@@ -233,18 +235,18 @@ server <- function(input, output, session) {
     if(!any(input$chooseColumns %in% names(data_load()))) return()
     if(!all(dic_draw()$class %in% c("hd_Cat", "hd_Dat")) | any(dic_draw()$n_distinct > 20)) return()
     if(length(input$chooseColumns) < 2) return()
-    plot_data <- data_load() %>% select(input$chooseColumns)
+    d <- data_load() %>% select(input$chooseColumns)
     if(any(dic_draw()$class == "hd_Dat")){
       dat_cols <- dic_draw()[dic_draw()$class == "hd_Dat",]$variable
-      plot_data <- plot_data %>% 
+      d <- d %>% 
         mutate_at(vars(all_of(dat_cols)), ~homodatum::as_Cat(as.character(.)))
     }
-    plot_data
+    d
   })
   
   hasdataNA <- reactive({
     req(plot_data_orig())
-    req(input$code_as_na)
+    # req(input$code_as_na)
     cols_contain_na <- purrr::map_lgl(.x = plot_data_orig(),
                                       .f = function(.x) any(is.na(.x)))
     if(length(input$code_as_na > 0)){
@@ -278,14 +280,14 @@ server <- function(input, output, session) {
     }
     if(!is.null(input$na_label)){
       d[is.na(d)] <- input$na_label
-      }
+    }
     d
   })
   
   hgch_viz <- reactive({
     req(input$chooseColumns)
     req(plot_data())
-    palette = input$palette
+    palette <- input$palette
     if(input$colour_method == "colourpalette"){
       palette <- input$palette
     } else if(input$colour_method == "custom"){
@@ -293,7 +295,7 @@ server <- function(input, output, session) {
       palette <- customColours()
     }
     if(is.null(palette)) return()
-    
+    # browser()
     opts <- dsvizopts::merge_dsviz_options(color_by = input$fillval, palette_colors = palette,
                                            title = input$title, subtitle = input$subtitle, caption = input$caption,
                                            background_color = input$background_color, dataLabels_type = input$dataLabel_type)
@@ -333,8 +335,12 @@ server <- function(input, output, session) {
     gl <- i_("get_link", lang())
     mb <- list(textInput("name", i_("gl_name", lang())),
                textInput("description", i_("gl_description", lang())),
+               textInput("source_title", i_("gl_source", lang()), value = "", placeholder = i_("gl_source_name", lang())),
+               textInput("source_path", " ", value = "", placeholder = "URL"),
                selectInput("license", i_("gl_license", lang()), choices = c("CC0", "CC-BY")),
                selectizeInput("tags", i_("gl_tags", lang()), choices = list("No tag" = "no-tag"), multiple = TRUE, options = list(plugins= list('remove_button', 'drag_drop'))),
+               # chipsInput(inputId = "tags", label = i_("gl_tags", lang()), placeholder = i_("gl_type_tags", lang())),
+               # chipsInput(inputId = "tags", label = "Tags", placeholder = "Type tags"),
                selectizeInput("category", i_("gl_category", lang()), choices = list("No category" = "no-category")))
     downloadDsUI("download_data_button", dropdownLabel = lb, text = dw, formats = c("html","jpeg", "pdf", "png"),
                  display = "dropdown", dropdownWidth = 170, getLinkLabel = gl, modalTitle = gl, modalBody = mb,
@@ -342,8 +348,7 @@ server <- function(input, output, session) {
                  modalFormatChoices = c("HTML" = "html", "PNG" = "png"))
   })
   
-  
-  par <- list(user_name = "brandon")
+  par <- list(user_name = "test")
   url_par <- reactive({
     url_params(par, session)
   })
@@ -356,15 +361,18 @@ server <- function(input, output, session) {
       nm <- paste0("saved", "_", gsub("[ _:]", "-", substr(as.POSIXct(Sys.time()), 1, 19)))
       updateTextInput(session, "download_data_button-modal_form-name", value = nm)
     }
+    browser()
     dv <- dsviz(x,
                 name = nm,
                 description = input$`download_data_button-modal_form-description`,
+                sources = list(title = input$`download_data_button-modal_form-source_title`, 
+                               path = input$`download_data_button-modal_form-source_path`),
                 license = input$`download_data_button-modal_form-license`,
-                tags = input$`download_data_button-modal_form-tags`,
+                tags = list(input$`download_data_button-modal_form-tags`),
                 category = input$`download_data_button-modal_form-category`)
     dspins_user_board_connect(bkt)
     Sys.setlocale(locale = "en_US.UTF-8")
-    pin(dv, bucket_id = bkt)
+    pins <- dspin_urls(element = dv, user_name = bkt)
   }
   
   
