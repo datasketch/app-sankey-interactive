@@ -54,16 +54,18 @@ background_color: Wähle Hintergrundfarbe
 styling: Style-Einstellungen
 error_down: Es ist ein Problem aufgetreten; probiere es später noch einmal.
 download_viz: Download
-get_link: Link zur Grafik
+get_link: Speichern / Teilen
 gl_name: Name
 gl_slug: Slug
 gl_description: Beschreibung
 gl_source: Quelle
 gl_source_name: Titel
+gl_source_path: URL
 gl_license: Lizent
 gl_tags: Tags
 gl_type_tags: Tag(s) eingeben und nach jedem Tag die Eingabetaste drücken
 gl_category: Kategorie
+gl_no_category: Ohne Kategorie
 gl_save: In DS-Library speichern
 gl_url: URL
 gl_iframe: Kopieren zum Einbetten in Webseite

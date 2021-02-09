@@ -54,18 +54,20 @@ background_color: Elige el color de fondo
 styling: Estilo
 error_down: ¡Oh, algo a sucedido!, por favor intenta más tarde.
 download_viz: Descarga
-get_link: Obtener enlace
+get_link: Guardar / Publicar
 gl_name: Nombre
 gl_slug: Slug
 gl_description: Descripción
 gl_source: Fuente
 gl_source_name: Título
+gl_source_path: URL
 gl_license: Licencia
 gl_tags: Etiquetas
 gl_type_tags: Presiona enter para agregar cada etiqueta
 gl_category: Categorías
+gl_no_category: Sin categoría
 gl_save: Guardar en dslibrary
-gl_url: URL
 gl_iframe: Copiar para embeber
+gl_url: URL
 cannot_plot: Esta visualización no puede ser trazada con el tipo de datos que has elegido.
 data_advice: Selecciona al menos dos columnas y usa sólo columnas categóricas con menos de 20 categorías.
