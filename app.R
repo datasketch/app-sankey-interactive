@@ -8,6 +8,7 @@ library(scales)
 library(tidyverse)
 library(V8)
 library(shinydisconnect)
+library(shinybusy)
 
 # load in ds packages
 library(dsmodules)
@@ -23,18 +24,31 @@ library(dsthemer)
 
 webshot::install_phantomjs()
 
-Sys.setlocale("LC_ALL","C")
+# Sys.setlocale("LC_ALL","C")
 
 # Define UI for app ----
 ui <- panelsPage(useShi18ny(),
                  disconnectMessage(
-                   text = "Oh no!, la sesión a finalizado, si estabas trabajando en la app, por favor contacta a soporte y cuentanos que ha sucedido//Oh no, the session has ended, if you were working on the app, please contact support and tell us what has happened",
-                   refresh = "O, intenta de nuevo//Or try again",
-                   background = "#385573",
-                   colour = "white",
-                   overlayColour = "grey",
-                   overlayOpacity = 0.3,
-                   refreshColour = "#FBC140"
+                   text = "Tu sesión ha finalizado, si tienes algún problema trabajando con la app por favor contáctanos y cuéntanos qué ha sucedido // Your session has ended, if you have any problem working with the app please contact us and tell us what happened.",
+                   refresh = "REFRESH",
+                   background = "#ffffff",
+                   colour = "#435b69",
+                   size = 14,
+                   overlayColour = "#2a2e30",
+                   overlayOpacity = 0.85,
+                   refreshColour = "#ffffff",
+                   css = "padding: 4.8em 3.5em !important; box-shadow: 0 1px 10px 0 rgba(0, 0, 0, 0.1) !important;"
+                 ),
+                 busy_start_up(
+                   loader = tags$img(
+                     src = "img/loading_gris.gif",
+                     width = 100
+                   ),
+                   #text = "Loading...",
+                   mode = "auto",
+                   #timeout = 3500,
+                   color = "#435b69",
+                   background = "#FFF"
                  ),
                  langSelectorInput("lang", position = "fixed"),
                  panel(title = ui_("upload_data"),
@@ -356,7 +370,7 @@ server <- function(input, output, session) {
                  )
   })
   
-  par <- list(user_name = "test")
+  par <- list(user_name = "test", org_name = NULL)
   url_par <- reactive({
     url_params(par, session)
   })
@@ -364,14 +378,16 @@ server <- function(input, output, session) {
   
   observe({
     req(hgch_viz())
-    if (is.null(url_par()$inputs$user_name)) return()
     user_name <- url_par()$inputs$user_name
+    org_name <- url_par()$inputs$org_name
+    if (is.null(user_name) & is.null(org_name)) return()
     downloadDsServer("download_data_button", 
                      element = reactive(hgch_viz()),
                      formats = c("html", "jpeg", "pdf", "png"),
                      errorMessage = i_("error_down", lang()),
                      elementType = "dsviz",
-                     user_name = user_name)
+                     user_name = user_name,
+                     org_name = org_name)
     
   })
   
