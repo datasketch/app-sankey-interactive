@@ -54,18 +54,20 @@ background_color: Choose background color
 styling: Styling
 error_down: There has been a problem; try again later.
 download_viz: Download
-get_link: Get link
+get_link: Save / Publish
 gl_name: Name
 gl_slug: Slug
 gl_description: Description
 gl_source: Source
 gl_source_name: Name
+gl_source_path: URL
 gl_license: License
 gl_tags: Tags
 gl_type_tags: Type tag(s) and press enter after each one
 gl_category: Category
+gl_no_category: No category
 gl_save: Save in dslibrary
-gl_url: URL
 gl_iframe: Copy to embed
+gl_url: URL
 cannot_plot: This visualization can not be plotted with the type of data you have chosen.
 data_advice: Make sure you select at least two columns and use only categorical columns with fewer than 20 categories.

@@ -330,22 +330,30 @@ server <- function(input, output, session) {
   
   
   output$download <- renderUI({
-    lb <- i_("download_viz", lang())
-    dw <- i_("download", lang())
-    gl <- i_("get_link", lang())
-    mb <- list(textInput("name", i_("gl_name", lang())),
-               textInput("description", i_("gl_description", lang())),
-               textInput("source_title", i_("gl_source", lang()), value = "", placeholder = i_("gl_source_name", lang())),
-               textInput("source_path", " ", value = "", placeholder = "URL"),
-               selectInput("license", i_("gl_license", lang()), choices = c("CC0", "CC-BY")),
-               selectizeInput("tags", i_("gl_tags", lang()), choices = list("No tag" = "no-tag"), multiple = TRUE, options = list(plugins= list('remove_button', 'drag_drop'))),
-               # chipsInput(inputId = "tags", label = i_("gl_tags", lang()), placeholder = i_("gl_type_tags", lang())),
-               # chipsInput(inputId = "tags", label = "Tags", placeholder = "Type tags"),
-               selectizeInput("category", i_("gl_category", lang()), choices = list("No category" = "no-category")))
-    downloadDsUI("download_data_button", dropdownLabel = lb, text = dw, formats = c("html","jpeg", "pdf", "png"),
-                 display = "dropdown", dropdownWidth = 170, getLinkLabel = gl, modalTitle = gl, modalBody = mb,
-                 modalButtonLabel = i_("gl_save", lang()), modalLinkLabel = i_("gl_url", lang()), modalIframeLabel = i_("gl_iframe", lang()),
-                 modalFormatChoices = c("HTML" = "html", "PNG" = "png"))
+    
+    downloadDsUI("download_data_button",
+                 display = "dropdown",
+                 formats = c("html","jpeg", "pdf", "png"),
+                 dropdownWidth = 170,
+                 modalFormatChoices = c("HTML" = "html", "PNG" = "png"),
+                 text = i_("download", lang()), 
+                 dropdownLabel = i_("download_viz", lang()), 
+                 getLinkLabel = i_("get_link", lang()), 
+                 modalTitle = i_("get_link", lang()), 
+                 modalButtonLabel = i_("gl_save", lang()), 
+                 modalLinkLabel = i_("gl_url", lang()), 
+                 modalIframeLabel = i_("gl_iframe", lang()),
+                 nameLabel = i_("gl_name", lang()),
+                 descriptionLabel = i_("gl_description", lang()),
+                 sourceLabel = i_("gl_source", lang()),
+                 sourceTitleLabel = i_("gl_source_name", lang()),
+                 sourcePathLabel = i_("gl_source_path", lang()),
+                 licenseLabel = i_("gl_license", lang()),
+                 tagsLabel = i_("gl_tags", lang()),
+                 tagsPlaceholderLabel = i_("gl_type_tags", lang()),
+                 categoryLabel = i_("gl_category", lang()),
+                 categoryChoicesLabels = i_("gl_no_category", lang())
+                 )
   })
   
   par <- list(user_name = "test")
@@ -353,38 +361,18 @@ server <- function(input, output, session) {
     url_params(par, session)
   })
   
-  pin_ <- function(x, bkt, ...) {
-    x <- dsmodules:::eval_reactives(x)
-    bkt <- dsmodules:::eval_reactives(bkt)
-    nm <- input$`download_data_button-modal_form-name`
-    if (!nzchar(input$`download_data_button-modal_form-name`)) {
-      nm <- paste0("saved", "_", gsub("[ _:]", "-", substr(as.POSIXct(Sys.time()), 1, 19)))
-      updateTextInput(session, "download_data_button-modal_form-name", value = nm)
-    }
-    browser()
-    dv <- dsviz(x,
-                name = nm,
-                description = input$`download_data_button-modal_form-description`,
-                sources = list(title = input$`download_data_button-modal_form-source_title`, 
-                               path = input$`download_data_button-modal_form-source_path`),
-                license = input$`download_data_button-modal_form-license`,
-                tags = list(input$`download_data_button-modal_form-tags`),
-                category = input$`download_data_button-modal_form-category`)
-    dspins_user_board_connect(bkt)
-    Sys.setlocale(locale = "en_US.UTF-8")
-    pins <- dspin_urls(element = dv, user_name = bkt)
-  }
-  
   
   observe({
     req(hgch_viz())
     if (is.null(url_par()$inputs$user_name)) return()
-    
-    downloadDsServer("download_data_button", element = reactive(hgch_viz()),
+    user_name <- url_par()$inputs$user_name
+    downloadDsServer("download_data_button", 
+                     element = reactive(hgch_viz()),
                      formats = c("html", "jpeg", "pdf", "png"),
                      errorMessage = i_("error_down", lang()),
-                     modalFunction = pin_, reactive(hgch_viz()),
-                     bkt = url_par()$inputs$user_name)
+                     elementType = "dsviz",
+                     user_name = user_name)
+    
   })
   
 }
