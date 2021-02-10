@@ -356,7 +356,7 @@ server <- function(input, output, session) {
                  )
   })
   
-  par <- list(user_name = "test")
+  par <- list(user_name = "test", org_name = NULL)
   url_par <- reactive({
     url_params(par, session)
   })
@@ -364,15 +364,16 @@ server <- function(input, output, session) {
   
   observe({
     req(hgch_viz())
-    if (is.null(url_par()$inputs$user_name)) return()
     user_name <- url_par()$inputs$user_name
-    downloadDsServer("download_data_button", 
+    org_name <- url_par()$inputs$org_name
+    if (is.null(user_name) & is.null(user_name)) return()
+    downloadDsServer(id = "download_data_button",
                      element = reactive(hgch_viz()),
                      formats = c("html", "jpeg", "pdf", "png"),
                      errorMessage = i_("error_down", lang()),
                      elementType = "dsviz",
-                     user_name = user_name)
-    
+                     user_name = user_name,
+                     org_name = org_name)
   })
   
 }
