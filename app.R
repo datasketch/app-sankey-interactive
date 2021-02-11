@@ -1,12 +1,12 @@
 # load in packages
 library(shiny)
-library(shinyWidgets)
+# library(shinyWidgets)
 library(dplyr)
-library(ggplot2)
-library(RColorBrewer)
-library(scales)
+# library(ggplot2)
+# library(RColorBrewer)
+# library(scales)
 library(tidyverse)
-library(V8)
+# library(V8)
 library(shinydisconnect)
 library(shinybusy)
 
