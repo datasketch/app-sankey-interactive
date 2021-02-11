@@ -70,4 +70,4 @@ gl_save: Save in dslibrary
 gl_iframe: Copy to embed
 gl_url: URL
 cannot_plot: This visualization can not be plotted with the type of data you have chosen.
-data_advice: Make sure you select at least two columns and use only categorical columns with fewer than 20 categories.
+data_advice: Select at least two columns with only categorical variables of fewer than 20 categories.

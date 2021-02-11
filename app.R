@@ -26,8 +26,16 @@ webshot::install_phantomjs()
 
 # Sys.setlocale("LC_ALL","C")
 
+styles <- "
+
+#ss-connect-dialog  a::before {
+ background: #da1c95 !important;
+  }
+"
+
 # Define UI for app ----
 ui <- panelsPage(useShi18ny(),
+                 styles = styles,
                  disconnectMessage(
                    text = "Tu sesión ha finalizado, si tienes algún problema trabajando con la app por favor contáctanos y cuéntanos qué ha sucedido // Your session has ended, if you have any problem working with the app please contact us and tell us what happened.",
                    refresh = "REFRESH",
@@ -332,7 +340,7 @@ server <- function(input, output, session) {
   })
   
   output$viz <- renderUI({
-    if(is.null(dic_draw()))return()
+    if(is.null(dic_draw()) | nrow(dic_draw()) == 0)return()
     if((!all(dic_draw()$class %in% c("hd_Cat", "hd_Dat")) | any(dic_draw()$n_distinct > 20)) | length(input$chooseColumns) < 2){
       v <- div(shinypanels::infomessage(type = "warning" , i_("cannot_plot", lang())),
                shinypanels::infomessage(type = "info" , i_("data_advice", lang())))
