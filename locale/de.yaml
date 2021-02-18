@@ -52,7 +52,8 @@ columns: Spalten
 choose_colors: Wähle Flow-Farben
 background_color: Wähle Hintergrundfarbe
 styling: Style-Einstellungen
-error_down: Es ist ein Problem aufgetreten; probiere es später noch einmal.
+cannot_plot: Dieser Graph can mit den ausgewählten Datentypen nicht erzeugt werden.
+data_advice: Bitte wähle mindestens eine Spalte aus und nutze nur kategorische Spalten mit weniger als 20 Kategorien.
 download_viz: Download
 get_link: Speichern / Teilen
 gl_name: Name
@@ -69,5 +70,4 @@ gl_no_category: Ohne Kategorie
 gl_save: In DS-Library speichern
 gl_url: URL
 gl_iframe: Kopieren zum Einbetten in Webseite
-cannot_plot: Dieser Graph can mit den ausgewählten Datentypen nicht erzeugt werden.
-data_advice: Bitte wähle mindestens eine Spalte aus und nutze nur kategorische Spalten mit weniger als 20 Kategorien.
+gl_error: Es ist ein Problem aufgetreten; probiere es später noch einmal.

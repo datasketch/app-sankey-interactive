@@ -24,8 +24,6 @@ library(dsthemer)
 
 webshot::install_phantomjs()
 
-# Sys.setlocale("LC_ALL","C")
-
 styles <- "
 
 #ss-connect-dialog  a::before {
@@ -392,7 +390,7 @@ server <- function(input, output, session) {
     downloadDsServer(id = "download_data_button",
                      element = reactive(hgch_viz()),
                      formats = c("html", "jpeg", "pdf", "png"),
-                     errorMessage = i_("error_down", lang()),
+                     errorMessage = i_("gl_error", lang()),
                      elementType = "dsviz",
                      user_name = user_name,
                      org_name = org_name)

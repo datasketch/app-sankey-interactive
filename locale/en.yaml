@@ -52,7 +52,6 @@ columns: Columns
 choose_colors: Choose colors
 background_color: Choose background color
 styling: Styling
-error_down: There has been a problem; try again later.
 download_viz: Download
 get_link: Save / Publish
 gl_name: Name
@@ -69,5 +68,4 @@ gl_no_category: No category
 gl_save: Save in dslibrary
 gl_iframe: Copy to embed
 gl_url: URL
-cannot_plot: This visualization can not be plotted with the type of data you have chosen.
-data_advice: Select at least two columns with only categorical variables of fewer than 20 categories.
+gl_error: There has been a problem; try again later.
